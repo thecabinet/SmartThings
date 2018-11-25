@@ -489,8 +489,10 @@ def parseEvent(evt) {
     }
     // Catch any other general numerical event (carbonDioxide, power, energy, humidity, level, temperature, ultravioletIndex, voltage, etc).
     else {
+        logger("parseEvent(): Uncaught type","info")
         data += ",unit=${unit} value=${value}"
     }
+    logger("parseEvent(): Updated data: [${data}]","info")
     return data
 }
 

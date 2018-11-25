@@ -55,7 +55,7 @@ preferences {
         	    "4" : "Debug",
         	    "5" : "Trace"
         	],
-        	defaultValue: "4",
+        	defaultValue: "3",
             displayDuringSetup: true,
         	required: false
         )
@@ -163,7 +163,7 @@ def updated() {
     logger("updated()","trace")
 
     // Update internal state:
-    state.loggingLevelIDE = (settings.configLoggingLevelIDE) ? settings.configLoggingLevelIDE.toInteger() : 4
+    state.loggingLevelIDE = (settings.configLoggingLevelIDE) ? settings.configLoggingLevelIDE.toInteger() : 5
 
     // Database config:
     state.databaseHost = settings.prefDatabaseHost

@@ -271,7 +271,7 @@ def handleModeEvent(evt) {
 def handleEvent(evt) {
     logger("handleEvent(): $evt.displayName($evt.name:$evt.unit) $evt.value","info")
     data = parseEvent(evt)
-    logger("handleEvent(): Handled event: Data: [${data}]","debug")
+    logger("handleEvent(): Handled event: Data: [${data}]","info")
     postToInfluxDB(data)
 }
 
@@ -307,7 +307,7 @@ def parseEvent(evt) {
     def valueBinary = ''
 
     def data = "${measurement},deviceId=${deviceId},deviceName=${deviceName},groupId=${groupId},groupName=${groupName},hubId=${hubId},hubName=${hubName},locationId=${locationId},locationName=${locationName}"
-    logger("parseEvent(): Initial data: [${data}]","debug")
+    logger("parseEvent(): Initial data: [${data}]","info")
 
     // Unit tag and fields depend on the event type:
     //  Most string-valued attributes can be translated to a binary value too.
@@ -604,7 +604,7 @@ def logSystemProperties() {
  *  Uses hubAction instead of httpPost() in case InfluxDB server is on the same LAN as the Smartthings Hub.
  **/
 def postToInfluxDB(data) {
-    logger("postToInfluxDB(): Posting data to InfluxDB: Host: ${state.databaseHost}, Port: ${state.databasePort}, Database: ${state.databaseName}, Data: [${data}]","debug")
+    logger("postToInfluxDB(): Posting data to InfluxDB: Host: ${state.databaseHost}, Port: ${state.databasePort}, Database: ${state.databaseName}, Data: [${data}]","info")
 
     try {
         def hubAction = new physicalgraph.device.HubAction(

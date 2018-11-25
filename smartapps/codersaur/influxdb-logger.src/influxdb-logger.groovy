@@ -163,7 +163,7 @@ def updated() {
     logger("updated()","trace")
 
     // Update internal state:
-    state.loggingLevelIDE = (settings.configLoggingLevelIDE) ? settings.configLoggingLevelIDE.toInteger() : 5
+    state.loggingLevelIDE = (settings.configLoggingLevelIDE) ? settings.configLoggingLevelIDE.toInteger() : 3
 
     // Database config:
     state.databaseHost = settings.prefDatabaseHost
@@ -270,7 +270,7 @@ def handleModeEvent(evt) {
  **/
 def handleEvent(evt) {
     logger("handleEvent(): $evt.displayName($evt.name:$evt.unit) $evt.value","info")
-    data = parseEvent(evt)
+    def data = parseEvent(evt)
     logger("handleEvent(): Handled event: Data: [${data}]","info")
     postToInfluxDB(data)
 }

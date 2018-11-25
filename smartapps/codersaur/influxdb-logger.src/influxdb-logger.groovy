@@ -42,7 +42,7 @@ definition(
 preferences {
 
     section("General:") {
-        input "prefDebugMode", "bool", title: "Enable debug logging?", defaultValue: true, displayDuringSetup: true
+        //input "prefDebugMode", "bool", title: "Enable debug logging?", defaultValue: true, displayDuringSetup: true
         input (
         	name: "configLoggingLevelIDE",
         	title: "IDE Live Logging Level:\nMessages with this level and higher will be logged to the IDE.",
@@ -55,7 +55,7 @@ preferences {
         	    "4" : "Debug",
         	    "5" : "Trace"
         	],
-        	defaultValue: "3",
+        	defaultValue: "4",
             displayDuringSetup: true,
         	required: false
         )
@@ -163,7 +163,7 @@ def updated() {
     logger("updated()","trace")
 
     // Update internal state:
-    state.loggingLevelIDE = (settings.configLoggingLevelIDE) ? settings.configLoggingLevelIDE.toInteger() : 3
+    state.loggingLevelIDE = (settings.configLoggingLevelIDE) ? settings.configLoggingLevelIDE.toInteger() : 4
 
     // Database config:
     state.databaseHost = settings.prefDatabaseHost

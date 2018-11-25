@@ -284,6 +284,7 @@ def handleEvent(evt) {
  *
  **/
 def parseEvent(evt) {
+    logger("parseEvent(): Parsing event: Event: [${evt}]","info")
     // Build data string to send to InfluxDB:
     //  Format: <measurement>[,<tag_name>=<tag_value>] field=<field_value>
     //    If value is an integer, it must have a trailing "i"

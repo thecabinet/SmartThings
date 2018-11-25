@@ -271,6 +271,7 @@ def handleModeEvent(evt) {
 def handleEvent(evt) {
     logger("handleEvent(): $evt.displayName($evt.name:$evt.unit) $evt.value","info")
     data = parseEvent(evt)
+    logger("handleEvent(): Handled event: Data: [${data}]","debug")
     postToInfluxDB(data)
 }
 

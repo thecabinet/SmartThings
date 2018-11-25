@@ -307,6 +307,7 @@ def parseEvent(evt) {
     def valueBinary = ''
 
     def data = "${measurement},deviceId=${deviceId},deviceName=${deviceName},groupId=${groupId},groupName=${groupName},hubId=${hubId},hubName=${hubName},locationId=${locationId},locationName=${locationName}"
+    logger("parseEvent(): Initial data: [${data}]","debug")
 
     // Unit tag and fields depend on the event type:
     //  Most string-valued attributes can be translated to a binary value too.

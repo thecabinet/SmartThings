@@ -62,9 +62,9 @@ preferences {
     }
 
     section ("InfluxDB Database:") {
-        input "prefDatabaseHost", "text", title: "Host", defaultValue: "10.10.10.10", required: true
+        input "prefDatabaseHost", "text", title: "Host", defaultValue: "192.168.86.101", required: true
         input "prefDatabasePort", "text", title: "Port", defaultValue: "8086", required: true
-        input "prefDatabaseName", "text", title: "Database Name", defaultValue: "", required: true
+        input "prefDatabaseName", "text", title: "Database Name", defaultValue: "metrics", required: true
         input "prefDatabaseUser", "text", title: "Username", required: false
         input "prefDatabasePass", "text", title: "Password", required: false
     }
@@ -795,8 +795,12 @@ private escapeStringForInfluxDB(str) {
 private getGroupName(id) {
 
     if (id == null) {return 'Home'}
-    else if (id == 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX') {return 'Kitchen'}
-    else if (id == 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX') {return 'Lounge'}
-    else if (id == 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX') {return 'Office'}
+    else if (id == '5f803ee8-b879-4537-890e-a3ee47ace89e') {return 'Aidan\'s Bedroom'}
+    else if (id == '9c4a82ff-fa50-4db7-b0df-a31181b211ef') {return 'Basement'}
+    else if (id == '2e206cb7-5279-40f2-8c9a-9f964f8a7b5d') {return 'Dining Area'}
+    else if (id == 'b776217f-adc7-40df-99f1-99ecb840e1c5') {return 'Garage'}
+    else if (id == '34bc4579-1d1d-4dba-ae81-8a24b2ecfe5f') {return 'Kitchen'}
+    else if (id == '433a3e25-0200-4191-9cb6-a14f6475638b') {return 'Master Closet'}
+    else if (id == 'e0b3f8fb-40a5-490e-b133-1c6c8138f838') {return 'Bathroom'}
     else {return 'Unknown'}
 }

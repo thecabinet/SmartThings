@@ -482,8 +482,8 @@ def parseEvent(evt) {
     }
     else if ('temperature' == evt.name) { // temperature: make it a float if it's only an int
         value = Float.parseFloat(value)
-    	data += ",unit=${unit} value=${value}"
-    } 
+        data += ",unit=${unit} value=${value}"
+    }
     // Catch any other event with a string value that hasn't been handled:
     else if (evt.value ==~ /.*[^0-9\.,-].*/) { // match if any characters are not digits, period, comma, or hyphen.
         logger("parseEvent(): Found a string value that's not explicitly handled: Device Name: ${deviceName}, Event Name: ${evt.name}, Value:${evt.value}","warn")

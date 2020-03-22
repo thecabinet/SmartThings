@@ -62,11 +62,12 @@ preferences {
     }
 
     section ("InfluxDB Database:") {
-        input "prefDatabaseHost", "text", title: "Host", defaultValue: "192.168.86.101", required: true
-        input "prefDatabasePort", "text", title: "Port", defaultValue: "8086", required: true
-        input "prefDatabaseName", "text", title: "Database Name", defaultValue: "metrics", required: true
-        input "prefDatabaseUser", "text", title: "Username", required: false
-        input "prefDatabasePass", "text", title: "Password", required: false
+        input name: "prefDatabaseProtocol", type: "enum", title: "Method", options: ["local", "http", "https"], description: "POST method", required: true
+        input name: "prefDatabaseHost", type: "text", title: "Host", defaultValue: "192.168.86.101", required: true
+        input name: "prefDatabasePort", type: "text", title: "Port", defaultValue: "8086", required: true
+        input name: "prefDatabaseName", type: "text", title: "Database Name", defaultValue: "metrics", required: true
+        input name: "prefDatabaseUser", type: "text", title: "Username", required: false
+        input name: "prefDatabasePass", type: "text", title: "Password", required: false
     }
 
     section("Polling:") {
@@ -166,6 +167,7 @@ def updated() {
     state.loggingLevelIDE = (settings.configLoggingLevelIDE) ? settings.configLoggingLevelIDE.toInteger() : 3
 
     // Database config:
+    state.databaseProtocol = settings.prefDatabaseProtocol
     state.databaseHost = settings.prefDatabaseHost
     state.databasePort = settings.prefDatabasePort
     state.databaseName = settings.prefDatabaseName
@@ -609,39 +611,47 @@ def logSystemProperties() {
  *  Uses hubAction instead of httpPost() in case InfluxDB server is on the same LAN as the Smartthings Hub.
  **/
 def postToInfluxDB(data) {
-    logger("postToInfluxDB(): Posting data to InfluxDB: Host: ${state.databaseHost}, Port: ${state.databasePort}, Database: ${state.databaseName}, Data: [${data}]","debug")
+    if (state.databaseProtocol == 'local') {
+        logger("postToInfluxDB(): Posting data to InfluxDB using HubAction: Host: ${state.databaseHost}, Port: ${state.databasePort}, Database: ${state.databaseName}, Data: [${data}]","debug")
+        try {
+            def hubAction = new physicalgraph.device.HubAction(
+                [
+                    method: "POST",
+                    path: state.path,
+                    body: data,
+                    headers: state.headers
+                ],
+                null,
+                [ callback: handleInfluxResponse ]
+            )
 
-    try {
-        def hubAction = new physicalgraph.device.HubAction(
-        	[
-                method: "POST",
-                path: state.path,
+            sendHubCommand(hubAction)
+        }
+        catch (Exception e) {
+            logger("postToInfluxDB(): Exception ${e} on ${hubAction}","error")
+        }
+    } else {
+        // handle WAN hosts
+        def uri = "${state.databaseProtocol}://${state.databaseHost}:${state.databasePort}{state.path}}"
+        def postParams =
+            [
+                uri: uri,
                 body: data,
                 headers: state.headers
-            ],
-            null,
-            [ callback: handleInfluxResponse ]
-        )
-
-        sendHubCommand(hubAction)
+            ]
+        logger("postToInfluxDB(): Posting data to InfluxDB using HTTP: URI: ${uri}, Body: [${data}], Headers: [${state.headers}]","debug")
+        try {
+            httpPost(postParams) { response ->
+                if (response.status != 204 ) {
+                    logger("Response status: ${response.status}","warn")
+                    logger("Response data: ${response.data}","warn")
+                    logger("Response contentType: ${response.contentType}","warn")
+                }
+            }
+        } catch (Exception e) {
+            logger("postToInfluxDB(): Something went wrong when posting: ${e}","error")
+        }
     }
-    catch (Exception e) {
-		logger("postToInfluxDB(): Exception ${e} on ${hubAction}","error")
-    }
-
-    // For reference, code that could be used for WAN hosts:
-    // def url = "http://${state.databaseHost}:${state.databasePort}/write?db=${state.databaseName}"
-    //    try {
-    //      httpPost(url, data) { response ->
-    //          if (response.status != 999 ) {
-    //              log.debug "Response Status: ${response.status}"
-    //              log.debug "Response data: ${response.data}"
-    //              log.debug "Response contentType: ${response.contentType}"
-    //            }
-    //      }
-    //  } catch (e) {
-    //      logger("postToInfluxDB(): Something went wrong when posting: ${e}","error")
-    //  }
 }
 
 /**
@@ -801,14 +811,9 @@ private escapeStringForInfluxDB(str) {
  *  See: https://community.smartthings.com/t/accessing-group-within-a-smartapp/6830
  **/
 private getGroupName(id) {
-
-    if (id == null) {return 'Home'}
-    else if (id == '5f803ee8-b879-4537-890e-a3ee47ace89e') {return 'Aidan\'s Bedroom'}
-    else if (id == '9c4a82ff-fa50-4db7-b0df-a31181b211ef') {return 'Basement'}
-    else if (id == '2e206cb7-5279-40f2-8c9a-9f964f8a7b5d') {return 'Dining Area'}
-    else if (id == 'b776217f-adc7-40df-99f1-99ecb840e1c5') {return 'Garage'}
-    else if (id == '34bc4579-1d1d-4dba-ae81-8a24b2ecfe5f') {return 'Kitchen'}
-    else if (id == '433a3e25-0200-4191-9cb6-a14f6475638b') {return 'Master Closet'}
-    else if (id == 'e0b3f8fb-40a5-490e-b133-1c6c8138f838') {return 'Bathroom'}
+    if (id == null) {return 'Sauna'}
+    else if (id == '1abbc82d-39fb-4e0d-ad9e-acbab11cdb4c') {return 'Sauna'}
+    else if (id == '5023e8ed-734a-42dc-8571-422a7d95fcfc') {return 'Outside'}
+    else if (id == 'a49fbbc2-0dcf-4d6a-82bb-13b2e9ce9549') {return 'Caravan'}
     else {return 'Unknown'}
 }

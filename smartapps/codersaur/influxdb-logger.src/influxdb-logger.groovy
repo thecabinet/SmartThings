@@ -632,7 +632,7 @@ def postToInfluxDB(data) {
         }
     } else {
         // handle WAN hosts
-        def uri = "${state.databaseProtocol}://${state.databaseHost}:${state.databasePort}{state.path}}"
+        def uri = "${state.databaseProtocol}://${state.databaseHost}:${state.databasePort}${state.path}"
         def postParams =
             [
                 uri: uri,

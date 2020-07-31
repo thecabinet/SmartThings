@@ -811,7 +811,9 @@ private escapeStringForInfluxDB(str) {
  *  See: https://community.smartthings.com/t/accessing-group-within-a-smartapp/6830
  **/
 private getGroupName(id) {
-    if (id == null) {return 'Home'}
-    else if (id == '9e5207d0-40c2-401b-bbd1-a1f81302e237') {return 'Home'}
+    if (id == null) {return 'null'}
+    else if (id == '1aef6dd2-7e6a-4f87-b77b-6402a15b695d') {return 'Basement'}
+    else if (id == 'b58141c5-2873-4248-9353-72c07e67435d') {return 'Laundry Room'}
+    else if (id == 'bbc578c0-cdd1-4378-821d-c77f1c8fe83b') {return 'Utility Closet'}
     else {return 'Unknown'}
 }

@@ -812,6 +812,7 @@ private escapeStringForInfluxDB(str) {
  **/
 private getGroupName(id) {
     if (id == null) {return 'null'}
+    else if (id == 'e0c35dc4-4d0c-4d49-89ac-ab8a37fd1985') {return 'Attic'}
     else if (id == '1aef6dd2-7e6a-4f87-b77b-6402a15b695d') {return 'Basement'}
     else if (id == '6ac6a939-15af-40fb-89fe-fcc6884f4f8e') {return 'Garage'}
     else if (id == 'b58141c5-2873-4248-9353-72c07e67435d') {return 'Laundry Room'}
